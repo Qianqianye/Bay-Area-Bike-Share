@@ -67,7 +67,7 @@ DAT.Globe = function(container) {
   var zoomSpeed = 50;
   var mouse = { x: 0, y: 0 }, mouseOnDown = { x: 0, y: 0 };
   var rotation = { x: 0, y: 0 },
-      target = { x: Math.PI /1.215, y: Math.PI / 4.8 },
+      target = { x: Math.PI /1.217, y: Math.PI / 4.786 },
       // target = { x: 23.885942, y: 45.079162 },
       targetOnDown = { x: 0, y: 0 };
   var distance = 100000, distanceTarget = 100000;
@@ -87,7 +87,7 @@ DAT.Globe = function(container) {
     w = container.offsetWidth || window.innerWidth;
     h = container.offsetHeight || window.innerHeight;
 
-    camera = new THREE.PerspectiveCamera(1, w / h, 1, 10000);
+    camera = new THREE.PerspectiveCamera(0.175, w / h, 1, 10000);
     camera.position.z = distance;
 
     scene = new THREE.Scene();
@@ -97,6 +97,8 @@ DAT.Globe = function(container) {
     shader = Shaders['earth'];
     uniforms = THREE.UniformsUtils.clone(shader.uniforms);
     uniforms['texture'].value = THREE.ImageUtils.loadTexture('image/world.jpg');
+    // uniforms['texture'].value = THREE.ImageUtils.loadTexture('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png');
+
     material = new THREE.ShaderMaterial({
           uniforms: uniforms,
           vertexShader: shader.vertexShader,
@@ -124,7 +126,7 @@ DAT.Globe = function(container) {
     mesh.scale.set( 1.1, 1.1, 1.1 );
     scene.add(mesh);
 
-    geometry = new THREE.BoxGeometry(0.005, 0.005, 1);
+    geometry = new THREE.BoxGeometry(0.005, 0.2, 1);
     geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,0,-0.5));
 
     point = new THREE.Mesh(geometry);
@@ -223,8 +225,8 @@ DAT.Globe = function(container) {
 
     var zoomDamp = distance/1000;
 
-    target.x = targetOnDown.x + (mouse.x - mouseOnDown.x) * 0.005 * zoomDamp;
-    target.y = targetOnDown.y + (mouse.y - mouseOnDown.y) * 0.005 * zoomDamp;
+    target.x = targetOnDown.x + (mouse.x - mouseOnDown.x) * 0.0005 * zoomDamp;
+    target.y = targetOnDown.y + (mouse.y - mouseOnDown.y) * 0.0005 * zoomDamp;
 
     target.y = target.y > PI_HALF ? PI_HALF : target.y;
     target.y = target.y < - PI_HALF ? - PI_HALF : target.y;
@@ -246,7 +248,7 @@ DAT.Globe = function(container) {
   function onMouseWheel(event) {
     event.preventDefault();
     if (overRenderer) {
-      zoom(event.wheelDeltaY * 0.3);
+      zoom(event.wheelDeltaY * 0.1);
     }
     return false;
   }
